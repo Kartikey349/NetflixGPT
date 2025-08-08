@@ -2,43 +2,61 @@ import { useRef, useState } from "react";
 import Header from "./Header";
 import validateCredentials from "../utils/validate";
 import {auth} from "../utils/firebase"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword,  signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+
 
 const Login = () => {
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [isSignin, setIsSignin] = useState(true)
     const email = useRef(null)
     const password = useRef(null)
     const name = useRef(null)
-    const [error, setError] = useState('')
+    const [error, setError] = useState(null)
 
-    const handleButtonClick = () => {
-        const res = validateCredentials(email.current.value, password.current.value)
-        if(res) {
-            setError("res")
-            return;
-        }
-
-        if(!isSignin){
-            createUserWithEmailAndPassword(auth, email.current.value, password.current.value).then((userCredentials) => {
-                //signed Up
-                const user = userCredentials.user;
-                console.log(user)
-            }).catch((error) => {
-                const errorCode = error.code;
-                console.log(errorCode)
-                setError(errorCode)
-            })
-        }else{
-            signInWithEmailAndPassword(auth, email.current.value, password.current.value).then((userCredentials) => {
-                //signed In
-                const user = userCredentials.user
-                console.log(user)
-            }).catch((error) => {
-                setError(error.message)
-            })
-        }
+const handleButtonClick = () => {
+  const res = validateCredentials(email.current.value, password.current.value);
+    if (res) {
+        setError(res);
+        return;
     }
+
+  if (!isSignin) {
+    createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+      .then((userCredentials) => {
+        const user = userCredentials.user
+        updateProfile(user, {
+            displayName: name.current.value
+            }).then(() => {
+                const {uid, email, displayName} = auth.currentUser;
+                dispatch(addUser({uid: uid, email: email, displayName: displayName}))
+
+                navigate("/browse");
+            }).catch((error) => {
+        });
+
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setError(err.message);
+      });
+  } else {
+    signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+      .then((userCredentials) => {
+        navigate("/browse");
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setError(err.message);
+      });
+  }
+};
+
 
     return <div className= "h-screen bg-cover bg-center bg-[url('https://assets.nflxext.com/ffe/siteui/vlv3/258d0f77-2241-4282-b613-8354a7675d1a/web/IN-en-20250721-TRIFECTA-perspective_cadc8408-df6e-4313-a05d-daa9dcac139f_small.jpg')]">
 
@@ -49,7 +67,6 @@ const Login = () => {
             <form className="bg-black/60  w-80 p-8 flex flex-col gap-4 rounded-md"
             onSubmit={(e) => {
                 e.preventDefault()
-                setError(null)
             }}
             >
 
@@ -76,7 +93,7 @@ const Login = () => {
                 ref={password}
                 />
 
-                <p className="text-red-600 font-bold">{error && error}</p>
+                {error && <p className="text-red-500">{error}</p>}
 
                 <button className="p-3 bg-red-600 hover:bg-red-700 text-white rounded" 
                 onClick={handleButtonClick}
