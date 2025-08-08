@@ -26,7 +26,7 @@ const handleGoogleSignIn = () => {
 
   signInWithPopup(auth, provider)
     .then((result) => {
-        
+
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
 
@@ -58,8 +58,6 @@ const handleButtonClick = () => {
             }).then(() => {
                 const {uid, email, displayName} = auth.currentUser;
                 dispatch(addUser({uid: uid, email: email, displayName: displayName}))
-
-                navigate("/browse");
             }).catch((error) => {
         });
 
@@ -68,10 +66,11 @@ const handleButtonClick = () => {
         console.log(err.message);
         setError(err.message);
       });
-  } else {
+  }
+   else {
     signInWithEmailAndPassword(auth, email.current.value, password.current.value)
-      .then((userCredentials) => {
-        navigate("/browse");
+      .then((userCredential) => {
+        const user = userCredential.user;
       })
       .catch((err) => {
         console.log(err.message);
