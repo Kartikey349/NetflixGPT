@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import Header from "./Header";
 import validateCredentials from "../utils/validate";
+import {auth} from "../utils/firebase"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
 
@@ -12,7 +14,30 @@ const Login = () => {
 
     const handleButtonClick = () => {
         const res = validateCredentials(email.current.value, password.current.value)
-        setError(res)
+        if(res) {
+            setError("res")
+            return;
+        }
+
+        if(!isSignin){
+            createUserWithEmailAndPassword(auth, email.current.value, password.current.value).then((userCredentials) => {
+                //signed Up
+                const user = userCredentials.user;
+                console.log(user)
+            }).catch((error) => {
+                const errorCode = error.code;
+                console.log(errorCode)
+                setError(errorCode)
+            })
+        }else{
+            signInWithEmailAndPassword(auth, email.current.value, password.current.value).then((userCredentials) => {
+                //signed In
+                const user = userCredentials.user
+                console.log(user)
+            }).catch((error) => {
+                setError(error.message)
+            })
+        }
     }
 
     return <div className= "h-screen bg-cover bg-center bg-[url('https://assets.nflxext.com/ffe/siteui/vlv3/258d0f77-2241-4282-b613-8354a7675d1a/web/IN-en-20250721-TRIFECTA-perspective_cadc8408-df6e-4313-a05d-daa9dcac139f_small.jpg')]">
@@ -24,6 +49,7 @@ const Login = () => {
             <form className="bg-black/60  w-80 p-8 flex flex-col gap-4 rounded-md"
             onSubmit={(e) => {
                 e.preventDefault()
+                setError(null)
             }}
             >
 
