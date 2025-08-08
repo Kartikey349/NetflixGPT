@@ -1,8 +1,9 @@
+import Body from "./component/Body"
 
 function App() {
   return (
     <div>
-      <p>Hello</p>
+      <Body />
     </div>
   )
 }
