@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword,  signInWithEmailAndPassword, updateProf
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 
 const Login = () => {
@@ -18,6 +19,28 @@ const Login = () => {
     const password = useRef(null)
     const name = useRef(null)
     const [error, setError] = useState(null)
+
+
+const handleGoogleSignIn = () => {
+  const provider = new GoogleAuthProvider();
+
+  signInWithPopup(auth, provider)
+    .then((result) => {
+        
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+
+      const user = result.user;
+
+      navigate("/browse");
+    })
+    .catch((error) => {
+      console.error("Google Sign-In Error:", error.message);
+      setError(error.message);
+    });
+};
+
+
 
 const handleButtonClick = () => {
   const res = validateCredentials(email.current.value, password.current.value);
@@ -108,6 +131,17 @@ const handleButtonClick = () => {
                 }}
                 >{isSignin ? "Sign up now": "Sign In Now"}</span>.
                 </p>
+
+                
+                <button
+                    onClick={handleGoogleSignIn}
+                    className="flex items-center justify-center p-3 bg-white rounded shadow hover:bg-gray-100"
+                    >
+                    <img src="https://logos-world.net/wp-content/uploads/2020/09/Google-Symbol.png" 
+                        alt="Google Logo" className="w-8" />
+                    <span className="text-gray-700 font-medium">Sign in with Google</span>
+                </button>
+        
             </form>
             </div>
 
