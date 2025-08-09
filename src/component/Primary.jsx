@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useTrailerVideo from "../hooks/useMovieTrailer";
 
 const Primary = ({movie}) => {
@@ -14,7 +14,7 @@ const Primary = ({movie}) => {
 
   return (
     <div className="top-0">
-      <iframe className="w-full h-screen" src={"https://www.youtube.com/embed/" + key + "?autoplay=0&mute=1"}  title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe>
+      <iframe className="w-full h-screen aspect-video" src={"https://www.youtube.com/embed/" + key + "?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1"}  title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe>
     </div>
   )
 }
