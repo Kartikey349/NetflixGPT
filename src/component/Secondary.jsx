@@ -1,6 +1,20 @@
+import { useSelector } from "react-redux"
+import MoviesList from "./MoviesList"
+
 const Secondary = () => {
+  const movies = useSelector((store) => store.movies)
+  const popularMovies = useSelector((store) => store.movies)
+
+  if(!movies) return;
+
   return (
-    <div>Secondary</div>
+    <div className="bg-black">
+      <div className="relative -mt-48">
+        <MoviesList title={"Now Playing"} movies={movies?.movies} />
+        <MoviesList title={"Popular"} movies={movies?.popularMovies} />
+        <MoviesList title={"Now Playing"} movies={movies?.movies} />
+      </div>
+    </div>
   )
 }
 

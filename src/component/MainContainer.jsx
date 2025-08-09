@@ -2,12 +2,14 @@ import { useSelector } from 'react-redux';
 import useNowPlayingMovies from '../hooks/useNowPlayingMovies';
 import Primary from './Primary'
 import VideoTitle from './VideoTitle'
+import usePopularMovies from '../hooks/usePopularMovies';
 
 const MainContainer = () => {
 
   const movies = useSelector((store) => store.movies?.movies)
 
   useNowPlayingMovies();
+  usePopularMovies();
   
   if(!movies) return;
 
