@@ -8,3 +8,18 @@ export const KEY_OPTION = {
 
 
 export const IMAGE_URL = "https://image.tmdb.org/t/p/w500"
+
+export const lang = {
+  en: {
+    search :"Search",
+    placeHolder : "What you wanna watch today"
+  },
+  hindi: {
+    search :"खोज",
+    placeHolder : "आज आप क्या देखना चाहते हैं"
+  },
+  spanish: {
+    search:"Buscar",
+    placeHolder: "¿Qué quieres ver hoy?"
+  }
+}
