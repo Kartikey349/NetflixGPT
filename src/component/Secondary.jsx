@@ -8,8 +8,8 @@ const Secondary = () => {
   if(!movies) return;
 
   return (
-    <div className="bg-black">
-      <div className="relative -mt-48">
+    <div className="bg-black pl-6">
+      <div className="relative -mt-64 sm:-mt-48">
         <MoviesList title={"Now Playing"} movies={movies?.movies} />
         <MoviesList title={"Popular"} movies={movies?.popularMovies} />
         <MoviesList title={"Now Playing"} movies={movies?.movies} />

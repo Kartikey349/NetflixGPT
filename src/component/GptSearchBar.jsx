@@ -3,6 +3,7 @@ import { KEY_OPTION, lang } from "../utils/constant"
 import Groq from "groq-sdk";
 import { useState } from "react";
 import {addGptMovies} from "../utils/gptSlice"
+import { FormData } from "groq-sdk/src/_shims/registry.js";
 
 const GptSearchBar = () => {
     const dispatch = useDispatch()
@@ -41,13 +42,13 @@ const GptSearchBar = () => {
     }
 
   return (
-    <div className='w-3/4 md:w-1/2'>
-        <div className='p-2 rounded-sm bg-black flex gap-2'>
+    <div className='sm:w-3/4 md:w-1/2'>
+        <form onSubmit={(e) =>{e.preventDefault()}} className='p-2 rounded-sm bg-black flex gap-2'>
             <input className='bg-white flex-1 rounded-md p-2 ' value={search} onChange={(e) => setSearch(e.target.value)} placeholder={lang[language].placeHolder} type='text' />
             <button className='bg-red-700 p-3 rounded-md text-white'
             onClick={handleClick}
             >{lang[language].search}</button>
-        </div>
+        </form>
     </div>
   )
 }
